@@ -1,4 +1,5 @@
 import os
+import collections
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
@@ -77,7 +78,21 @@ class Trees(Resource):
             return {'message': 'Unable to add pin :('}, 418
 
     def get(self):
-        return 200
+        # requestData = request.args
+        pinsRaw = Pin.query.order_by(Pin.id.desc())
+
+        if(pinsRaw == None):
+            return {'message': 'not found :/'}, 404
+
+        pins = collections.deque()
+        pinJSON = {}
+        for pin in pinsRaw:
+            pinJSON['id'] = pin.id
+            pinJSON['longitude'] = pin.longitude
+            pinJSON['latitude'] = pin.latitude
+            pins.append(pinJSON)
+
+        return {'pins': list(pins)}, 200
 
     def options(self):
         return
