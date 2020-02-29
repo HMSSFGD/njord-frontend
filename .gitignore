@@ -1,15 +1,19 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
-/.pnp
-.pnp.js
+src/js/node_modules
+src/js/.pnp
+src/js.pnp.js
+
+# python
+src/python/flask
+src/python/migration
 
 # testing
-/coverage
+src/js/coverage
 
 # production
-/build
+src/js/build
 
 # misc
 .DS_Store
@@ -18,6 +22,6 @@
 .env.test.local
 .env.production.local
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+src/jsnpm-debug.log*
+src/jsyarn-debug.log*
+src/jsyarn-error.log*
