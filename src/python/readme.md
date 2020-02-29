@@ -1,1 +1,3 @@
-basically there is a git file for heroku here
+when deploying to github run
+```heroku run initDB```
+then scale to 1 web
