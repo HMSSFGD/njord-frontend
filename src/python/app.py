@@ -4,7 +4,7 @@ from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Resource, Api
-from flask import Flask, json, request, jsonify
+from flask import Flask, request #, json, jsonify
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
