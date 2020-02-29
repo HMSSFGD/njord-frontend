@@ -85,8 +85,8 @@ class Trees(Resource):
             return {'message': 'not found :/'}, 404
 
         pins = collections.deque()
-        pinJSON = {}
         for pin in pinsRaw:
+            pinJSON = {}
             pinJSON['id'] = pin.id
             pinJSON['longitude'] = pin.longitude
             pinJSON['latitude'] = pin.latitude
