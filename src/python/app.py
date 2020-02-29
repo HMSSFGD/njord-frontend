@@ -70,7 +70,7 @@ class Trees(Resource):
     def post(self):
         requestData = request.json
 
-        newPin = Pin(latitude=requestData['latitude'], longitude=requestData['longitude'])
+        newPin = Pin(latitude = requestData['latitude'], longitude = requestData['longitude'])
 
         if(newPin.addPin()):
             return {'message': 'Pin added!'}, 201
