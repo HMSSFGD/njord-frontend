@@ -9,7 +9,6 @@ src/js.pnp.js
 src/python/flask
 src/python/migrations
 src/python/app.db
-src/python/Pipfile.lock
 
 # testing
 src/js/coverage
