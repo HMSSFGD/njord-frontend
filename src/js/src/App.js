@@ -8,23 +8,32 @@ import Directions from './components/Directions.js';
 import { 
   Fab, 
   CircularProgress,
-  SwipeableDrawer
-} from '@material-ui/core/';
+  SwipeableDrawer,
+  Button,
+  AppBar,
+  Toolbar,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+  ListItemSecondaryAction,
+  Grid
+} from '@material-ui/core';
+import Switch from '@material-ui/core/Switch';
 import Nature from '@material-ui/icons/Nature';
+
+import MenuRoundedIcon from '@material-ui/icons/MenuRounded';
+import MenuOpenRoundedIcon from '@material-ui/icons/MenuOpenRounded';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import Brightness2OutlinedIcon from '@material-ui/icons/Brightness2Outlined';
 import blue from '@material-ui/core/colors/blue';
 import green from '@material-ui/core/colors/green';
 
 
-function PlantButton() {
-    const content = useState(<Nature style={{ color: "#fff", position: 'absolute' }} />)
-
-
-}
-
 function App() {
   const [state, setState] = useState(0)
-  const [drawerState, setDrawerState] = useState(open)
+  const [drawerState, setDrawerState] = useState(false)
+  const [theme, setTheme] = useState(lightTheme)
 
   let fabContent = <Nature style={{ color: "#fff", position: 'absolute' }} />
 
@@ -576,34 +585,67 @@ function App() {
     // case 2:
   }
 
-  const toggleDrawer = (side, open) => event => {
+  const toggleDrawer = (open) => event => {
     if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
+
+    setDrawerState(open)
   }
 
   return (
-      <ThemeProvider theme={theme}>
-        <div className="App">
-          <GoogleComponents>
-            <Map theme="mapTheme">
-              <Marker position={{lat: -34, lng: 151}}></Marker>
-            </Map>
-          </GoogleComponents>
-          <div className="fab">
-              <Fab color="primary" onClick={() => setState(1)}>
-                  {fabContent}
-              </Fab>
-          </div>
-          <SwipeableDrawer
-            open={state.left}
-            onClose={toggleDrawer('left', false)}
-            onOpen={toggleDrawer('left', true)}
-          >
+      <React.Fragment>
+        <ThemeProvider theme={theme}>
+            <AppBar position="fixed" style={{color: 'white',}}>
+              <Toolbar>
+                  <Button onClick={toggleDrawer(true)}>
+                    <MenuRoundedIcon style={{color: 'white'}}/>
+                  </Button>
+                  <div style = {{fontFamily: 'Courgette', fontSize: '24pt'}}>
+                    Woodshack
+                  </div>
+              </Toolbar>
+            </AppBar>
+            <GoogleComponents>
+              <Map theme="mapTheme">
+                <Marker position={{lat: -34, lng: 151}}></Marker>
+              </Map>
+            </GoogleComponents>
+            <div className="fab">
+                <Fab color="primary" onClick={() => setState(1)}>
+                    {fabContent}
+                </Fab>
+            </div>
             
+          </ThemeProvider>
+          <SwipeableDrawer open={drawerState} onClose={toggleDrawer(false)} onOpen={toggleDrawer(true)}>
+            <List>
+              <ListItem></ListItem>
+                <Button>
+                  <MenuRoundedIcon onClick={toggleDrawer(false)}/>
+                </Button>
+              <ListItem>
+                <ListItemIcon>
+                  <Brightness2OutlinedIcon />
+                </ListItemIcon>
+  
+                <ListItemText>
+                  <div style={{fontFamily: 'Trade Winds'}}>
+                    xXx__Dark Mode___xXx __
+                  </div>
+                </ListItemText>
+                <ListItemSecondaryAction>
+                  <Switch 
+                  checked={darkMode}
+                  onChange={()=>setDarkMode(!darkMode)}
+                  value="darkMode"
+                  color="primary"
+                  />
+                </ListItemSecondaryAction>
+              </ListItem>
+            </List>
           </SwipeableDrawer>
-        </div>
-        </ThemeProvider>
+      </React.Fragment>
   );
 }
 
