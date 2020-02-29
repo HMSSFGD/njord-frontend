@@ -8,6 +8,7 @@ import Directions from './components/Directions.js';
 import { 
   Fab, 
   CircularProgress,
+  SwipeableDrawer
 } from '@material-ui/core/';
 import Nature from '@material-ui/icons/Nature';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
@@ -23,7 +24,9 @@ function PlantButton() {
 
 function App() {
   const [state, setState] = useState(0)
-  const [fabContent, setFabContent] = useState(<Nature style={{ color: "#fff", position: 'absolute' }} />)
+  const [drawerState, setDrawerState] = useState(open)
+
+  let fabContent = <Nature style={{ color: "#fff", position: 'absolute' }} />
 
   const theme = createMuiTheme({
     palette: {
@@ -560,17 +563,23 @@ function App() {
 
   switch(state) {
     case 0:
-      setFabContent(<Nature style={{ color: "#fff", position: 'absolute' }} />)      
+      fabContent = <Nature style={{ color: "#fff", position: 'absolute' }} />      
       break
     case 1:
-      setFabContent(
+      fabContent = 
         <React.Fragment>
           <Nature style={{ color: "#fff", position: 'absolute' }} />
           <CircularProgress style={{ color: "#fff", position: 'absolute' }}/>
         </React.Fragment>
-      )
+      
       break
     // case 2:
+  }
+
+  const toggleDrawer = (side, open) => event => {
+    if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
   }
 
   return (
@@ -586,6 +595,13 @@ function App() {
                   {fabContent}
               </Fab>
           </div>
+          <SwipeableDrawer
+            open={state.left}
+            onClose={toggleDrawer('left', false)}
+            onOpen={toggleDrawer('left', true)}
+          >
+            
+          </SwipeableDrawer>
         </div>
         </ThemeProvider>
   );
