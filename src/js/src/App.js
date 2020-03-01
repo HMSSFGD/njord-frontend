@@ -33,7 +33,7 @@ import green from '@material-ui/core/colors/green';
 function App() {
   const [state, setState] = useState(0)
   const [drawerState, setDrawerState] = useState(false)
-  const [theme, setTheme] = useState(lightTheme)
+  const [mapTheme, setMapTheme] = useState(lightTheme)
 
   let fabContent = <Nature style={{ color: "#fff", position: 'absolute' }} />
 
@@ -607,7 +607,7 @@ function App() {
               </Toolbar>
             </AppBar>
             <GoogleComponents>
-              <Map theme="mapTheme">
+              <Map theme={mapTheme}>
                 <Marker position={{lat: -34, lng: 151}}></Marker>
               </Map>
             </GoogleComponents>
@@ -637,7 +637,7 @@ function App() {
                 <ListItemSecondaryAction>
                   <Switch 
                   checked={darkMode}
-                  onChange={()=>setDarkMode(!darkMode)}
+                  onChange={()=>setMapTheme(darkTheme)}
                   value="darkMode"
                   color="primary"
                   />
