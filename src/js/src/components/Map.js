@@ -7,7 +7,7 @@ class Map extends Component {
 
         this.state = {
             options: {
-                zoom: 13,
+                zoom: 10,
                 center: {
                     lat: 51.4560665, 
                     lng: -2.6047954,
