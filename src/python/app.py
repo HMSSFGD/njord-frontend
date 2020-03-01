@@ -4,7 +4,7 @@ from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Resource, Api
-from flask import Flask, json, request, jsonify
+from flask import Flask, request #, json, jsonify
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -51,6 +51,14 @@ class Pin(db.Model):
         except:
             return False
 
+    def deletePin(self):
+        try:
+            db.session.delete(self)
+            db.session.commit()
+            return True
+        except:
+            return False
+
 
 
 # the api/resource
@@ -70,7 +78,8 @@ class Trees(Resource):
     def post(self):
         requestData = request.json
 
-        newPin = Pin(latitude=requestData['latitude'], longitude=requestData['longitude'])
+        newPin = Pin(latitude = requestData['latitude'],
+        longitude = requestData['longitude'])
 
         if(newPin.addPin()):
             return {'message': 'Pin added!'}, 201
