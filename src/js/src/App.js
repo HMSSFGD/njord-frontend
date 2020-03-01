@@ -21,6 +21,8 @@ import {
 } from '@material-ui/core';
 import Switch from '@material-ui/core/Switch';
 import Nature from '@material-ui/icons/Nature';
+import Done from '@material-ui/icons/Done';
+import Close from '@material-ui/icons/Close';
 
 import MenuRoundedIcon from '@material-ui/icons/MenuRounded';
 import MenuOpenRoundedIcon from '@material-ui/icons/MenuOpenRounded';
@@ -28,17 +30,16 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import Brightness2OutlinedIcon from '@material-ui/icons/Brightness2Outlined';
 import blue from '@material-ui/core/colors/blue';
 import green from '@material-ui/core/colors/green';
+import { light } from '@material-ui/core/styles/createPalette';
 
 
 function App() {
-  const [state, setState] = useState(0)
-  const [drawerState, setDrawerState] = useState(false)
-  const [mapTheme, setMapTheme] = useState(lightTheme)
-
+  
   let fabContent = <Nature style={{ color: "#fff", position: 'absolute' }} />
-
-  const theme = createMuiTheme({
+  
+  const lightMode = createMuiTheme({
     palette: {
+      type: 'light',
       primary: green,
       secondary: blue,
       action: "#fff",
@@ -48,20 +49,54 @@ function App() {
     },
   });
 
+  const darkMode = createMuiTheme({
+    palette: {
+      type: 'dark',
+      primary: {
+        main: '#303030'
+      }
+    },
+  });
+
+  const [markers, setMarkers] = useState([])
+
+  const dropPin = (latLng) => {
+    if(state == 1) {
+      setMarkers([...markers, latLng])
+      fetch('http://woodshack-api.herokuapp.com/trees', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          "latitude": latLng.lat(),
+          "longitude": latLng.lng(),
+        })
+      }).then((response) => {
+        if(response.status == 201) {
+          setState(2)
+        }
+        else {
+          setState(3)
+        }
+      })
+    }
+  }
+
   const lightTheme = {
-    options: {
       styles: [
-          {
-            "elementType": "geometry",
-            "stylers": [
-              {
-                "color": "#ebe3cd"
-              }
-            ]
-          },
-          {
-            "elementType": "labels",
-            "stylers": [
+        {
+          "elementType": "geometry",
+          "stylers": [
+            {
+              "color": "#ebe3cd"
+            }
+          ]
+        },
+        {
+          "elementType": "labels",
+          "stylers": [
               {
                 "visibility": "off"
               }
@@ -326,13 +361,6 @@ function App() {
             ]
           }
         ],
-      zoom: 15,
-      center: {
-          lat: 51.4560665, 
-          lng: -2.6047954,
-      },
-      disableDefaultUI: true,
-  },
   }
 
   const darkTheme = {
@@ -570,6 +598,21 @@ function App() {
     ],
   }
 
+  const [state, setState] = useState(0)
+  const [drawerState, setDrawerState] = useState(false)
+  const [mapTheme, setMapTheme] = useState(0)
+
+  const mapStyles = [lightTheme, darkTheme]
+  const themeMode = [lightMode, darkMode]
+
+  let markers2 = fetch('http://woodshack-api.herokuapp.com/trees', {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  })
+
   switch(state) {
     case 0:
       fabContent = <Nature style={{ color: "#fff", position: 'absolute' }} />      
@@ -580,9 +623,19 @@ function App() {
           <Nature style={{ color: "#fff", position: 'absolute' }} />
           <CircularProgress style={{ color: "#fff", position: 'absolute' }}/>
         </React.Fragment>
-      
       break
-    // case 2:
+    case 2:
+      fabContent = 
+        <React.Fragment>
+          <Done style={{ color: "#fff", position: 'absolute' }} />
+        </React.Fragment>
+        setTimeout(    setTimeout(() => setState(0), 2000)
+    
+        <React.Fragment>
+          <Close style={{ color: "#fff", position: 'absolute' }} />
+        </React.Fragment>
+        setTimeout(() => setState(0), 1000)
+    break
   }
 
   const toggleDrawer = (open) => event => {
@@ -592,10 +645,10 @@ function App() {
 
     setDrawerState(open)
   }
-
+  console.log(markers)
   return (
       <React.Fragment>
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={themeMode[mapTheme]}>
             <AppBar position="fixed" style={{color: 'white',}}>
               <Toolbar>
                   <Button onClick={toggleDrawer(true)}>
@@ -607,8 +660,10 @@ function App() {
               </Toolbar>
             </AppBar>
             <GoogleComponents>
-              <Map theme={mapTheme}>
-                <Marker position={{lat: -34, lng: 151}}></Marker>
+              <Map theme={mapStyles[mapTheme]} dropPin={dropPin}>
+                {markers.map((latLng) => 
+                  <Marker position={latLng} />
+                )}
               </Map>
             </GoogleComponents>
             <div className="fab">
@@ -630,16 +685,20 @@ function App() {
                 </ListItemIcon>
   
                 <ListItemText>
-                  <div style={{fontFamily: 'Trade Winds'}}>
-                    xXx__Dark Mode___xXx __
+                  
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  })   xXx__Dark Mode__xXx___
                   </div>
                 </ListItemText>
                 <ListItemSecondaryAction>
                   <Switch 
-                  checked={darkMode}
-                  onChange={()=>setMapTheme(darkTheme)}
-                  value="darkMode"
-                  color="primary"
+                    onChange={() => {mapTheme == 0 ? setMapTheme(1) : setMapTheme(0)}}
+                    value="darkMode"
+                    color="primary"
                   />
                 </ListItemSecondaryAction>
               </ListItem>
