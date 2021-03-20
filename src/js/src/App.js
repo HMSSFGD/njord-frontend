@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import axios from 'axios';
@@ -29,7 +29,8 @@ import blue from '@material-ui/core/colors/blue';
 import green from '@material-ui/core/colors/green';
 import { light } from '@material-ui/core/styles/createPalette';
 import { useFetch } from './hooks.js';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import leaflet from 'leaflet';
 
 function App() {
   
@@ -86,9 +87,35 @@ function App() {
     }
   }
 
-  const [state, setState] = useState(0)
-  const [drawerState, setDrawerState] = useState(false)
-  const [mapTheme, setMapTheme] = useState(0)
+  
+  const ws = useMemo(() => new WebSocket('ws://localhost:3080'), []);
+
+  useEffect(() => {
+    ws.onopen = () => {
+      console.log("Connected");
+    }
+
+    ws.onmessage = e => {
+      console.log("Message Received");
+    }
+
+    ws.onclose = () => {
+      console.log("Disconnected");
+    }
+  })
+
+  var map = leaflet.map('map', {
+    crs: leaflet.CRS.Simple
+  });
+
+  var bounds = [[0,0], [2856,1998]];
+  var image = leaflet.imageOverlay('map.png', bounds).addTo(map);
+
+  map.fitBounds(bounds);
+
+  const [state, setState] = useState(0);
+  const [drawerState, setDrawerState] = useState(false);
+  const [mapTheme, setMapTheme] = useState(0);
 
   var lightTheme = {}
 
@@ -142,6 +169,7 @@ function App() {
     )
   }
 
+
   return (
       <React.Fragment>
         <ThemeProvider theme={themeMode[mapTheme]}>
@@ -163,17 +191,6 @@ function App() {
                     {fabContent}
                 </Fab>
             </div>
-            <MapContainer style={{height: '100vh'}} center={[51.505, -0.09]} zoom={13} scrollWheelZoom={false}>
-              <TileLayer
-                attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              <Marker position={[51.505, -0.09]}>
-                <Popup>
-                  A pretty CSS3 popup. <br /> Easily customizable.
-                </Popup>  
-              </Marker>
-            </MapContainer>
           </ThemeProvider>
           <SwipeableDrawer open={drawerState} onClose={toggleDrawer(false)} onOpen={toggleDrawer(true)}>
             <List>
