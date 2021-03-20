@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import GoogleComponents from './components/GoogleComponents.js';
-import Marker from './components/Marker.js';
-import Map from './components/Map.js';
-import Directions from './components/Directions.js';
 import axios from 'axios';
 import { 
   Fab, 
@@ -33,6 +29,7 @@ import blue from '@material-ui/core/colors/blue';
 import green from '@material-ui/core/colors/green';
 import { light } from '@material-ui/core/styles/createPalette';
 import { useFetch } from './hooks.js';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 
 function App() {
   
@@ -41,8 +38,10 @@ function App() {
   const lightMode = createMuiTheme({
     palette: {
       type: 'light',
-      primary: green,
-      secondary: blue,
+      primary: {
+        main: '#002036'
+      },
+      secondary: green,
       action: "#fff",
     },
     status: {
@@ -58,6 +57,7 @@ function App() {
       }
     },
   });
+  
   const [markers, setMarkers] = useState([])
 
   const dropPin = (latLng) => {
@@ -86,523 +86,13 @@ function App() {
     }
   }
 
-  const lightTheme = {
-      styles: [
-        {
-          "elementType": "geometry",
-          "stylers": [
-            {
-              "color": "#ebe3cd"
-            }
-          ]
-        },
-        {
-          "elementType": "labels",
-          "stylers": [
-              {
-                "visibility": "off"
-              }
-            ]
-          },
-          {
-            "elementType": "labels.text.fill",
-            "stylers": [
-              {
-                "color": "#523735"
-              }
-            ]
-          },
-          {
-            "elementType": "labels.text.stroke",
-            "stylers": [
-              {
-                "color": "#f5f1e6"
-              }
-            ]
-          },
-          {
-            "featureType": "administrative",
-            "elementType": "geometry.stroke",
-            "stylers": [
-              {
-                "color": "#c9b2a6"
-              }
-            ]
-          },
-          {
-            "featureType": "administrative.land_parcel",
-            "stylers": [
-              {
-                "visibility": "off"
-              }
-            ]
-          },
-          {
-            "featureType": "administrative.land_parcel",
-            "elementType": "geometry.stroke",
-            "stylers": [
-              {
-                "color": "#dcd2be"
-              }
-            ]
-          },
-          {
-            "featureType": "administrative.land_parcel",
-            "elementType": "labels.text.fill",
-            "stylers": [
-              {
-                "color": "#ae9e90"
-              }
-            ]
-          },
-          {
-            "featureType": "administrative.neighborhood",
-            "stylers": [
-              {
-                "visibility": "off"
-              }
-            ]
-          },
-          {
-            "featureType": "landscape.natural",
-            "elementType": "geometry",
-            "stylers": [
-              {
-                "color": "#dfd2ae"
-              }
-            ]
-          },
-          {
-            "featureType": "poi",
-            "elementType": "geometry",
-            "stylers": [
-              {
-                "color": "#dfd2ae"
-              }
-            ]
-          },
-          {
-            "featureType": "poi",
-            "elementType": "labels.text",
-            "stylers": [
-              {
-                "visibility": "off"
-              }
-            ]
-          },
-          {
-            "featureType": "poi",
-            "elementType": "labels.text.fill",
-            "stylers": [
-              {
-                "color": "#93817c"
-              }
-            ]
-          },
-          {
-            "featureType": "poi.business",
-            "stylers": [
-              {
-                "visibility": "off"
-              }
-            ]
-          },
-          {
-            "featureType": "poi.park",
-            "elementType": "geometry.fill",
-            "stylers": [
-              {
-                "color": "#77bb40"
-              }
-            ]
-          },
-          {
-            "featureType": "poi.park",
-            "elementType": "labels.text.fill",
-            "stylers": [
-              {
-                "color": "#447530"
-              }
-            ]
-          },
-          {
-            "featureType": "road",
-            "elementType": "geometry",
-            "stylers": [
-              {
-                "color": "#f5f1e6"
-              }
-            ]
-          },
-          {
-            "featureType": "road",
-            "elementType": "labels.icon",
-            "stylers": [
-              {
-                "visibility": "off"
-              }
-            ]
-          },
-          {
-            "featureType": "road.arterial",
-            "elementType": "geometry",
-            "stylers": [
-              {
-                "color": "#fdfcf8"
-              }
-            ]
-          },
-          {
-            "featureType": "road.highway",
-            "elementType": "geometry",
-            "stylers": [
-              {
-                "color": "#f8c967"
-              }
-            ]
-          },
-          {
-            "featureType": "road.highway",
-            "elementType": "geometry.stroke",
-            "stylers": [
-              {
-                "color": "#e9bc62"
-              }
-            ]
-          },
-          {
-            "featureType": "road.highway.controlled_access",
-            "elementType": "geometry",
-            "stylers": [
-              {
-                "color": "#e98d58"
-              }
-            ]
-          },
-          {
-            "featureType": "road.highway.controlled_access",
-            "elementType": "geometry.stroke",
-            "stylers": [
-              {
-                "color": "#db8555"
-              }
-            ]
-          },
-          {
-            "featureType": "road.local",
-            "elementType": "labels.text.fill",
-            "stylers": [
-              {
-                "color": "#806b63"
-              }
-            ]
-          },
-          {
-            "featureType": "transit",
-            "stylers": [
-              {
-                "visibility": "off"
-              }
-            ]
-          },
-          {
-            "featureType": "transit.line",
-            "elementType": "geometry",
-            "stylers": [
-              {
-                "color": "#dfd2ae"
-              }
-            ]
-          },
-          {
-            "featureType": "transit.line",
-            "elementType": "labels.text.fill",
-            "stylers": [
-              {
-                "color": "#8f7d77"
-              }
-            ]
-          },
-          {
-            "featureType": "transit.line",
-            "elementType": "labels.text.stroke",
-            "stylers": [
-              {
-                "color": "#ebe3cd"
-              }
-            ]
-          },
-          {
-            "featureType": "transit.station",
-            "elementType": "geometry",
-            "stylers": [
-              {
-                "color": "#dfd2ae"
-              }
-            ]
-          },
-          {
-            "featureType": "water",
-            "elementType": "geometry.fill",
-            "stylers": [
-              {
-                "color": "#00b9e4"
-              },
-              {
-                "weight": 2.5
-              }
-            ]
-          },
-          {
-            "featureType": "water",
-            "elementType": "labels.text.fill",
-            "stylers": [
-              {
-                "color": "#92998d"
-              }
-            ]
-          }
-        ],
-  }
-
-  const darkTheme = {
-    styles: [
-      {
-        "elementType": "geometry",
-        "stylers": [
-          {
-            "color": "#242f3e"
-          }
-        ]
-      },
-      {
-        "elementType": "labels",
-        "stylers": [
-          {
-            "visibility": "off"
-          }
-        ]
-      },
-      {
-        "elementType": "labels.text.fill",
-        "stylers": [
-          {
-            "color": "#746855"
-          }
-        ]
-      },
-      {
-        "elementType": "labels.text.stroke",
-        "stylers": [
-          {
-            "color": "#242f3e"
-          }
-        ]
-      },
-      {
-        "featureType": "administrative.locality",
-        "elementType": "labels.text.fill",
-        "stylers": [
-          {
-            "color": "#d59563"
-          }
-        ]
-      },
-      {
-        "featureType": "administrative.neighborhood",
-        "stylers": [
-          {
-            "visibility": "off"
-          }
-        ]
-      },
-      {
-        "featureType": "poi",
-        "elementType": "labels.text",
-        "stylers": [
-          {
-            "visibility": "off"
-          }
-        ]
-      },
-      {
-        "featureType": "poi",
-        "elementType": "labels.text.fill",
-        "stylers": [
-          {
-            "color": "#d59563"
-          }
-        ]
-      },
-      {
-        "featureType": "poi.business",
-        "stylers": [
-          {
-            "visibility": "off"
-          }
-        ]
-      },
-      {
-        "featureType": "poi.park",
-        "elementType": "geometry",
-        "stylers": [
-          {
-            "color": "#263c3f"
-          }
-        ]
-      },
-      {
-        "featureType": "poi.park",
-        "elementType": "geometry.fill",
-        "stylers": [
-          {
-            "color": "#8cca5b"
-          }
-        ]
-      },
-      {
-        "featureType": "poi.park",
-        "elementType": "labels.text.fill",
-        "stylers": [
-          {
-            "color": "#6b9a76"
-          }
-        ]
-      },
-      {
-        "featureType": "road",
-        "elementType": "geometry",
-        "stylers": [
-          {
-            "color": "#38414e"
-          }
-        ]
-      },
-      {
-        "featureType": "road",
-        "elementType": "geometry.stroke",
-        "stylers": [
-          {
-            "color": "#212a37"
-          }
-        ]
-      },
-      {
-        "featureType": "road",
-        "elementType": "labels.icon",
-        "stylers": [
-          {
-            "visibility": "off"
-          }
-        ]
-      },
-      {
-        "featureType": "road",
-        "elementType": "labels.text.fill",
-        "stylers": [
-          {
-            "color": "#9ca5b3"
-          }
-        ]
-      },
-      {
-        "featureType": "road.highway",
-        "elementType": "geometry",
-        "stylers": [
-          {
-            "color": "#746855"
-          }
-        ]
-      },
-      {
-        "featureType": "road.highway",
-        "elementType": "geometry.stroke",
-        "stylers": [
-          {
-            "color": "#1f2835"
-          }
-        ]
-      },
-      {
-        "featureType": "road.highway",
-        "elementType": "labels.text.fill",
-        "stylers": [
-          {
-            "color": "#f3d19c"
-          }
-        ]
-      },
-      {
-        "featureType": "transit",
-        "stylers": [
-          {
-            "visibility": "off"
-          }
-        ]
-      },
-      {
-        "featureType": "transit",
-        "elementType": "geometry",
-        "stylers": [
-          {
-            "color": "#2f3948"
-          }
-        ]
-      },
-      {
-        "featureType": "transit.station",
-        "elementType": "labels.text.fill",
-        "stylers": [
-          {
-            "color": "#d59563"
-          }
-        ]
-      },
-      {
-        "featureType": "water",
-        "elementType": "geometry",
-        "stylers": [
-          {
-            "color": "#17263c"
-          }
-        ]
-      },
-      {
-        "featureType": "water",
-        "elementType": "geometry.fill",
-        "stylers": [
-          {
-            "color": "#92c7d8"
-          },
-          {
-            "weight": 2.5
-          }
-        ]
-      },
-      {
-        "featureType": "water",
-        "elementType": "labels.text.fill",
-        "stylers": [
-          {
-            "color": "#515c6d"
-          }
-        ]
-      },
-      {
-        "featureType": "water",
-        "elementType": "labels.text.stroke",
-        "stylers": [
-          {
-            "color": "#17263c"
-          }
-        ]
-      }
-    ],
-  }
-
   const [state, setState] = useState(0)
   const [drawerState, setDrawerState] = useState(false)
   const [mapTheme, setMapTheme] = useState(0)
+
+  var lightTheme = {}
+
+  var darkTheme = {}
 
   const mapStyles = [lightTheme, darkTheme]
   const themeMode = [lightMode, darkMode]
@@ -655,30 +145,35 @@ function App() {
   return (
       <React.Fragment>
         <ThemeProvider theme={themeMode[mapTheme]}>
-            <AppBar position="fixed" style={{color: 'white',}}>
+            <AppBar position="fixed" style={{backdropFilter: 'blur(5px)', opacity: '95%', boxShadow: 'none', color: 'white', boxShadow: 'none', minHeight: 100, background: 'linear-gradient(90deg, rgba(0,32,54,1) 0%, rgba(57,212,162,1) 100%)'}}>
               <Toolbar>
                   <Button onClick={toggleDrawer(true)}>
-                    <MenuRoundedIcon style={{color: 'white'}}/>
+                    {/* <MenuRoundedIcon style={{color: 'white'}}/> */}
+                    <div style = {{fontFamily: 'Cormorant Garamond', fontSize: '35pt', color: 'white'}}>
+                      Njord.
+                    </div>
                   </Button>
-                  <div style = {{fontFamily: 'Courgette', fontSize: '24pt'}}>
-                    Woodshack
-                  </div>
               </Toolbar>
             </AppBar>
-            <GoogleComponents>
-              <Map theme={mapStyles[mapTheme]} dropPin={dropPin}>
-                {markers.map((latLng) => 
-                  <Marker position={latLng} />
-                )}
-                {pins}
-              </Map>
-            </GoogleComponents>
+            <div className="background" style={{position: 'absolute', width: '100vw', minHeight: 100, backgroundColor: 'red'}}>
+
+            </div>
             <div className="fab">
                 <Fab color="primary" onClick={() => {state == 2 ? setState(0) : setState(1)}}>
                     {fabContent}
                 </Fab>
             </div>
-            
+            <MapContainer style={{height: '100vh'}} center={[51.505, -0.09]} zoom={13} scrollWheelZoom={false}>
+              <TileLayer
+                attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <Marker position={[51.505, -0.09]}>
+                <Popup>
+                  A pretty CSS3 popup. <br /> Easily customizable.
+                </Popup>  
+              </Marker>
+            </MapContainer>
           </ThemeProvider>
           <SwipeableDrawer open={drawerState} onClose={toggleDrawer(false)} onOpen={toggleDrawer(true)}>
             <List>

@@ -10,6 +10,8 @@ src/python/flask
 src/python/migrations
 src/python/app.db
 
+node_modules
+
 # testing
 src/js/coverage
 
