@@ -6,11 +6,11 @@ import NjordPopup from './Popup.js';
 export default function Map() {
   const bounds = [[0,0], [1998*3/64, 2856*3/64]];
   const [markers, setMarkers] = useState([])
-  const ws = useMemo(() => new WebSocket('ws://localhost:8080/ws'), []);
+  const ws = useMemo(() => new WebSocket('ws://njord.icedcoffee.dev/ws'), []);
 
   useEffect(() => {
     ws.onopen = () => {
-      fetch('http://localhost:8080/api/reports')
+      fetch('https://njord.icedcoffee.dev/api/reports')
         .then(response => response.json())
         .then(msg => setMarkers(m => m.concat(msg)));
     }
