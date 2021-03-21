@@ -6,7 +6,7 @@ import NjordPopup from './Popup.js';
 export default function Map() {
   const bounds = [[0,0], [1998*3/64, 2856*3/64]];
   const [markers, setMarkers] = useState([])
-  const ws = useMemo(() => new WebSocket('ws://njord.icedcoffee.dev/ws'), []);
+  const ws = useMemo(() => new WebSocket('wss://njord.icedcoffee.dev/ws'), []);
 
   useEffect(() => {
     ws.onopen = () => {
