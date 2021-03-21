@@ -28,7 +28,7 @@ export default function Map() {
           setMarkers(m => m.filter(i => i.id !== msg.data.id).concat([msg.data]));
           break;
         case "DELETEPIN":
-          setMarkers(m => m.filter(i => i.id !== msg.data.id).concat([msg.data]));
+          setMarkers(m => m.filter(i => i.id !== msg.data.id));
           break;
         default:
           console.error("Got weird data: ", msg);
