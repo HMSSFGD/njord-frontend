@@ -35,4 +35,6 @@ jobs:
           port: ${{ secrets.PORT }}
           source: "build/*"
           target: "app"
+          rm: true
+          strip_components: 1
 
