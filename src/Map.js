@@ -43,12 +43,12 @@ export default function Map() {
   return (
     <MapContainer
       bounds={bounds}
-      whenCreated={(map) => leaflet.imageOverlay('map_big.png', bounds).addTo(map)}
+      whenCreated={(map) => leaflet.imageOverlay(`${process.env.PUBLIC_URL}/map_big.png`, bounds).addTo(map)}
       center={[1998*3/128, 2856*3/128]}
       crs={leaflet.CRS.Simple}
       zoom={6}
       scrollWheelZoom={true}
-      style={{height: "100vh"}}
+      style={{minHeight: "100%"}}
     >
       {markers.map(m => m && (
         <NjordPopup key={m.id} report={m} />
